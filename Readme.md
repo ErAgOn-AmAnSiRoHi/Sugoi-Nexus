@@ -1,4 +1,5 @@
-# 🎬 Movie Recommendation System
+# 🎬 One-Stop Recommendation System
+## (MOVIE/ANIME/MUSIC)
 
 ## 🚀 Getting Started
 
@@ -57,3 +58,10 @@ Recommendations appear on the **secondary display** of the **3D mini PC setup** 
 
 🎯 Enjoy discovering new recommendations! 🍿✨
 
+---
+
+## Contribution
+Feel free to fork this repository, make improvements, and submit pull requests!
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
