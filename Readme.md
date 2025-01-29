@@ -1,22 +1,59 @@
-1. Run a http server in the parent directory using python:
-	> python -m http.server 8000
-	
-2. Now, you can access the website on the localhost address:
-	> http://localhost:8000/
-	
-3. You will land on the index page. Click on **ENTER** to explore the world of recommendations.
+# 🎬 Movie Recommendation System
 
-4. Now, you will be redirected to the homepage of the website. There you will be able to see an image gallery containing movie posters. You may interact with it by moving the mouse pointer over it, as it has a parallax effect in place which moves the poster tiles accordingly.
-	**NOTE:** The posters are fetched using TMDB API which most probably won't work in India (due to some government policy restrictions). So you are advised to use a VPN.
-	
-**NOTE:** Generate embeddings (as there was limited space available, we have removed embedding files from the zip folder) using the embedding generator scripts for each category individually.
+## 🚀 Getting Started
 
-5. Click on "Explore {Category}" button for the respective category you want to explore. Now, in the background, run the respective recommender script (the reason why this process wasn't automated in the final draft of the project is that there were issues with the flask-cors and endpoints, and so we had to drop the plan of automating the execution of respective recommender scripts in a terminal using python:
-	> python3 {category-specific}recommender.py
-	
-	But before running the script make sure you have flask and flask-cors installed. If not, install it using pip:
-		> pip install flask flask-cors
+To run the project locally, follow these steps:
 
-6. Once the flask server is booted up, you may enter the Title of the {Category} media you want to generate recommendations for and click "Search".
+### 1️⃣ Start an HTTP Server
+Run an HTTP server in the parent directory using Python:
+```bash
+python -m http.server 8000
+```
 
-7. The recommendations will be shown on the secondary display (of the 3d mini pc setup rendered in the canvas). You may click an individual recommendation */clickable* to get more detailed information about that title including a movie poster, genres, a synopsis as well as a direct link for the YouTube Trailer of that title */clickable*.
+### 2️⃣ Access the Website
+Once the server is running, visit:
+🔗 [http://localhost:8000/](http://localhost:8000/)
+
+### 3️⃣ Navigate to the Index Page
+You will land on the index page. Click on **ENTER** to explore the world of recommendations.
+
+### 4️⃣ Experience the Homepage
+- The homepage contains an interactive **image gallery** featuring movie posters.
+- The posters move with a **parallax effect** as you hover over them.
+
+📝 **NOTE:** Posters are fetched via the **TMDB API**, which may not work in India due to government restrictions. It is recommended to use a **VPN** to bypass this issue.
+
+### 5️⃣ Generate Embeddings
+The embedding files were removed due to limited storage space. You need to generate embeddings manually using the provided **embedding generator scripts** for each category.
+
+### 6️⃣ Explore Recommendations
+Click on the **Explore {Category}** button for your desired category. Then, manually run the corresponding recommender script in the terminal:
+```bash
+python3 {category-specific}recommender.py
+```
+
+💡 **Why isn't this automated?**
+Due to **flask-cors** issues, we couldn't automate the execution of recommender scripts in the final version.
+
+📝 **NOTE:**  Install Dependencies (If Needed)
+Before running the script, ensure you have **Flask** and **Flask-CORS** installed. If not, install them using:
+```bash
+pip install flask flask-cors
+```
+
+### 7️⃣ Search for Recommendations
+Once the Flask server is running:
+1. Enter the **Title** of the {Category} media.
+2. Click **Search**.
+
+### 8️⃣ View Recommendations
+Recommendations appear on the **secondary display** of the **3D mini PC setup** rendered in the canvas. Each recommendation is **clickable** and provides:
+✅ A movie poster 🎭  
+✅ Genres 🎞️  
+✅ Synopsis 📜  
+✅ A direct link to the **YouTube Trailer** 🎥 *(clickable)*  
+
+---
+
+🎯 Enjoy discovering new recommendations! 🍿✨
+
