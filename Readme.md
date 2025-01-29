@@ -60,8 +60,8 @@ Recommendations appear on the **secondary display** of the **3D mini PC setup** 
 
 ---
 
-## Directory Structure (Tree):
-'''
+## 📂 Directory Structure
+```
 ├── A1_FSD_Report.pdf
 ├── Anime
 │   ├── anime-dataset-2023.csv
@@ -89,8 +89,7 @@ Recommendations appear on the **secondary display** of the **3D mini PC setup** 
 │   └── music_recommender.py
 ├── music.html
 └── Readme.md
-
-'''
+```
 
 ## Contribution
 Feel free to fork this repository, make improvements, and submit pull requests!
