@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommender</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .movie-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            display: flex;
+            opacity: 0.9;
+            transition: opacity 0.5s ease;
+        }
+        .movie-poster {
+            width: 50%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 1s ease-in-out;
+        }
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: rgba(0,0,0,0.7);
+        }
+        .setup-container {
+            display: flex;
+            gap: 50px;
+            align-items: center;
+        }
+        .scene {
+            width: 600px;
+            height: 400px;
+            perspective: 1000px;
+        }
+        .pc {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(-10deg) rotateY(20deg);
+        }
+        .face {
+            position: absolute;
+            background-color: #1a1a1a;
+            border: 2px solid #333;
+        }
+        .front {
+            width: 400px;
+            height: 300px;
+            transform: translateZ(100px);
+        }
+        .back {
+            width: 400px;
+            height: 300px;
+            transform: translateZ(-100px) rotateY(180deg);
+        }
+        .left {
+            width: 200px;
+            height: 300px;
+            left: -100px;
+            transform: rotateY(90deg);
+        }
+        .top {
+            width: 400px;
+            height: 200px;
+            top: -100px;
+            transform: rotateX(-90deg);
+        }
+        .bottom {
+            width: 400px;
+            height: 200px;
+            bottom: -100px;
+            transform: rotateX(90deg);
+        }
+        .screen {
+            width: 320px;
+            height: 240px;
+            background-color: #000;
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .search-button {
+            width: 100px;
+            height: 30px;
+            background-color: #00ff00;
+            border: none;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        .search-button:hover {
+            background-color: #00cc00;
+            box-shadow: 0 0 10px #00ff00;
+        }
+        .search-button:active {
+            transform: scale(0.95);
+        }
+        #search-input {
+            width: 80%;
+            margin-bottom: 10px;
+            background-color: #003300;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 5px;
+        }
+        .second-monitor {
+            width: 300px;
+            height: 450px;
+            position: relative;
+            transform: perspective(1000px) rotateX(-5deg) rotateY(-10deg);
+        }
+        .monitor-frame {
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 0 20px rgba(0,255,0,0.3);
+        }
+        .monitor-screen {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            border-radius: 5px;
+            overflow: hidden;
+            padding: 15px;
+            box-sizing: border-box;
+            border: 2px solid #00ff00;
+            box-shadow: inset 0 0 10px #00ff00;
+        }
+        .monitor-stand {
+            width: 120px;
+            height: 80px;
+            background-color: #333;
+            position: absolute;
+            bottom: -80px;
+            left: 50%;
+            z-index: -1;
+            transform: translateX(-50%);
+            clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+        }
+        .search-results {
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            height: 100%;
+            overflow-y: auto;
+        }
+        .search-results h2 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 16px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .search-results ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .search-results li {
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #00ff00;
+            background-color: rgba(0, 255, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .search-results li:hover {
+            background-color: rgba(0, 255, 0, 0.2);
+            transform: translateX(5px);
+        }
+
+        .movie-details {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .movie-info {
+            max-width: 70%;
+        }
+
+        .movie-info h2 {
+            margin: 0 0 10px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .movie-info p {
+            margin: 5px 0;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .trailer-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .trailer-link:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="movie-background" id="movieBackground">
+        <div class="movie-poster" id="poster1"></div>
+        <div class="movie-poster" id="poster2"></div>
+    </div>
+    <div class="content-wrapper">
+        <div class="setup-container">
+            <div class="scene">
+                <div class="pc">
+                    <div class="face front">
+                        <div class="screen">
+                            <input type="text" id="search-input" placeholder="Enter movie title...">
+                            <button class="search-button" onclick="handleSearch()">SEARCH</button>
+                            <div id="search-query"></div>
+                        </div>
+                    </div>
+                    <div class="face back"></div>
+                    <div class="face left"></div>
+                    <div class="face top"></div>
+                    <div class="face bottom"></div>
+                </div>
+            </div>
+
+            <div class="second-monitor">
+                <div class="monitor-frame">
+                    <div class="monitor-screen">
+                        <div class="search-results" id="search-results">
+                            <h2>Search Results</h2>
+                            <p style="color: #005500;">Enter a movie title and click SEARCH...</p>
+                        </div>
+                        <div id="movie-details-modal" style="display: none;">
+                            <h2 class="modal-title"></h2>
+                            <img class="modal-poster" alt="Movie Poster" />
+                            <p class="modal-synopsis"></p>
+                            <p class="modal-genres"></p>
+                            <a class="modal-trailer" target="_blank">Watch Trailer</a>
+                            <button onclick="document.getElementById('movie-details-modal').style.display='none';">Close</button>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="monitor-stand"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TMDB_API_KEY = '46aaafa794c29bf2ed52a294aa3907de'; // Replace with your actual TMDB API key
+        const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
+    
+        let actorPosters = [];
+        let currentPosterIndex = 0;
+    
+        async function fetchActorPosters() {
+            try {
+                const response = await fetch(`https://api.themoviedb.org/3/person/popular?api_key=${TMDB_API_KEY}&language=en-US&page=1`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                return data.results.map(actor => actor.profile_path).filter(path => path);
+            } catch (error) {
+                console.error('Error fetching actor posters:', error);
+                return [];
+            }
+        }
+    
+        function updateBackgroundPosters() {
+            const poster1 = document.getElementById('poster1');
+            const poster2 = document.getElementById('poster2');
+    
+            poster1.style.opacity = 0;
+            poster2.style.opacity = 0;
+    
+            setTimeout(() => {
+                poster1.style.backgroundImage = `url(${TMDB_IMAGE_BASE_URL}${actorPosters[currentPosterIndex]})`;
+                currentPosterIndex = (currentPosterIndex + 1) % actorPosters.length;
+                poster2.style.backgroundImage = `url(${TMDB_IMAGE_BASE_URL}${actorPosters[currentPosterIndex]})`;
+                currentPosterIndex = (currentPosterIndex + 1) % actorPosters.length;
+    
+                poster1.style.opacity = 1;
+                poster2.style.opacity = 1;
+            }, 1000);
+        }
+    
+        async function initializeBackgroundPosters() {
+            actorPosters = await fetchActorPosters();
+            updateBackgroundPosters();
+            setInterval(updateBackgroundPosters, 3000); // Change posters every 10 seconds
+        }
+    
+        async function showMovieDetails(movieTitle) {
+            const searchResultsContainer = document.getElementById('search-results');
+            const secondMonitorScreen = document.querySelector('.monitor-screen');
+
+            try {
+                // Show loading state
+                secondMonitorScreen.innerHTML = '<p style="color: #00ff00;">Loading movie details...</p>';
+
+                // Fetch movie details from the backend
+                const response = await fetch('http://127.0.0.1:5000/movie_details', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: movieTitle }),
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    secondMonitorScreen.innerHTML = `<p style="color: red;">${data.error}</p>`;
+                    return;
+                }
+
+                // Create movie details HTML
+                const movieDetailsHtml = `
+                    <div class="search-results">
+                        <h2>${data.title}</h2>
+                        <div class="movie-details">
+                            <img src="${data.poster_url}" alt="${data.title} Poster" style="max-width: 150px; margin-right: 15px;">
+                            <div>
+                                <p><strong>Genres:</strong> ${data.genres}</p>
+                                <p><strong>Synopsis:</strong> ${data.synopsis}</p>
+                                ${data.trailer_url 
+                                    ? `<a href="${data.trailer_url}" target="_blank" class="trailer-link">Watch Trailer</a>` 
+                                    : '<p style="color: gray;">No trailer available</p>'
+                                }
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Update the secondary monitor screen with movie details
+                secondMonitorScreen.innerHTML = movieDetailsHtml;
+
+            } catch (error) {
+                console.error('Error fetching movie details:', error);
+                secondMonitorScreen.innerHTML = '<p style="color: red;">An error occurred while fetching movie details.</p>';
+            }
+        }
+
+        async function handleSearch() {
+            const query = document.getElementById('search-input').value.trim();
+            const searchResultsContainer = document.getElementById('search-results');
+            searchResultsContainer.innerHTML = '<p>Loading...</p>';
+
+            if (!query) {
+                searchResultsContainer.innerHTML = '<p style="color: red;">Please enter a movie title!</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/recommend', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: query, category: 'movie' }),
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    searchResultsContainer.innerHTML = `<p style="color: red;">${data.error}</p>`;
+                    return;
+                }
+
+                if (!Array.isArray(data.recommendations) || data.recommendations.length === 0) {
+                    searchResultsContainer.innerHTML = `<p>No recommendations found for "${query}".</p>`;
+                    return;
+                }
+
+                let resultsHtml = `<h2>Recommendations for "${data.input_movie}"</h2><ul>`;
+                data.recommendations.forEach(rec => {
+                    resultsHtml += `
+                        <li onclick="showMovieDetails('${rec.title}')" style="cursor: pointer;">
+                            ${rec.title} (Similarity: ${rec.similarity.toFixed(2)})
+                        </li>
+                    `;
+                });
+                resultsHtml += `</ul>`;
+                searchResultsContainer.innerHTML = resultsHtml;
+
+            } catch (error) {
+                console.error('Error fetching recommendations:', error);
+                searchResultsContainer.innerHTML = '<p style="color: red;">An error occurred while fetching recommendations.</p>';
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Initialize the actor background
+            initializeBackgroundPosters();
+        });
+    </script>
+            
+</body>
+</html>
