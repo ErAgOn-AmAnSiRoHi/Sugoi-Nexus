@@ -48,7 +48,7 @@ Once the Flask server is running:
 2. Click **Search**.
 
 ### 8️⃣ View Recommendations
-Recommendations appear on the **secondary display** of the **3D mini PC setup** rendered in the canvas. Each recommendation is **clickable** and provides:
+Recommendations appear on the **secondary display** of the **3D mini PC setup** rendered in the canvas. Each recommendation is **clickable** and provides:  
 ✅ A media poster 🎭  
 ✅ Genres 🎞️  
 ✅ Synopsis 📜  
