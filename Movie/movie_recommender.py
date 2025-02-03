@@ -128,7 +128,7 @@ class MovieRecommender:
 
 # TMDB API Key
 # TMDB API configuration
-tmdb.API_KEY = '46aaafa794c29bf2ed52a294aa3907de'
+tmdb.API_KEY = 'ENTER YOUR TMDB API KEY HERE'
 
 def get_movie_details(title):
     try:
@@ -162,7 +162,7 @@ def get_movie_details(title):
         return None
 
 # YouTube API configuration
-YOUTUBE_API_KEY = 'AIzaSyBm19rJFnA6jrxv8IBkQLwBZubDkUKOebM'
+YOUTUBE_API_KEY = 'ENTER YOUR YOUTUBE API KEY HERE'
 
 def get_trailer_url(title):
     try:
